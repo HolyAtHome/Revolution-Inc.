@@ -19,23 +19,70 @@ $(document).ready(function() {
     window.setInterval(function() {
         checkForNewCraftables();
         render();
-        console.log(unlockedCraftables.length);
     }, 10);
 });
 
 function checkForNewCraftables() {
+    var tempCraftables = [];
     for (var i = 0; i < craftables.length; i++) {
+        var reqMet = true;
         var c = craftables[i];
         for(var key in resources) {
-            if(c.requirements[resources[key].name]) {
-                console.log(c.requirements[resources[key].name]);
+            var req = c.requirements[resources[key].name];
+            if(req) {
+                if(req > resources[key].amount) {
+                    reqMet = false
+                    break;
+                }
             }
         }
-        unlockedCraftables.push(c);
+        if(reqMet) {
+            tempCraftables.push(c);
+        }
     }
+    tempCraftables.forEach(e => {
+        var splice = craftables.indexOf(e);
+        if(splice > -1) {
+            craftables.splice(splice, 1);
+            unlockedCraftables.push(e);
+        }
+    });
+}
+
+function buyItem(toBuy) {
+    console.log(toBuy);
 }
 
 function render() {
     $('#resourceCoal').text(resources.coal.amount);
     $('#resourceIron').text(resources.iron.amount);
+
+    renderCraftables();
+}
+
+function renderCraftables() {
+    for (var i = 0; i < unlockedCraftables.length; i++) {
+        var e = unlockedCraftables[i];
+        if(!e.rendered) {
+            var div = document.createElement('div');
+            var name = document.createElement('p');
+            name.innerHTML = e.name;
+            var requirements = document.createElement('div');
+            for(var key in e.requirements) {
+                var req = document.createElement('p');
+                req.innerHTML = key + ': ' + e.requirements[key]
+                requirements.appendChild(req);
+            }
+            var bttnBuy = document.createElement('button');
+            bttnBuy.innerHTML = 'buy';
+            bttnBuy.onclick = function() { buyItem(e) };
+
+            div.appendChild(name);
+            div.appendChild(requirements);
+            div.appendChild(bttnBuy);
+            document.getElementById('craftables').appendChild(div);
+
+            e.rendered = true;
+        }
+    }
 }
