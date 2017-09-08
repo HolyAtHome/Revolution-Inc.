@@ -1,0 +1,9 @@
+#resources {
+    border: 1px solid black;
+    width: 200px;
+}
+
+#resourceClickable {
+    width: 64px;
+    height: 64px;
+}

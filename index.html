@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Revolution Inc.</title>
+        <link rel="icon" type="image/png" href="resources/favicon.png">
+        
+        <link rel="stylesheet" href="css/style.css">
+
+        <script src="libs/jquery-3.2.1.min.js"></script>
+        <script src="libs/decimal.js"></script>
+
+        <script src="js/data.js"></script>
+        <script src="js/script.js"></script>
+    </head>
+    <body>
+        <img id="resourceClickable" alt="Resource" />
+        <div id="resources">
+            <p>Coal: <div id="resourceCoal"></div></p>
+            <p>Iron: <div id="resourceIron"></div></p>
+        </div>
+        <div id="changeResources">
+            <button onclick="setCurrentResource(resources.coal)">Coal</button>
+            <button onclick="setCurrentResource(resources.iron)">Iron</button>
+        </div>
+        <div id="craftables">
+            
+        </div>
+    </body>
+</html>
