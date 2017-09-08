@@ -13,7 +13,7 @@ function setCurrentResource(res) {
 $(document).ready(function() {
     setCurrentResource(resources.coal);
     $('#resourceClickable').on('click', function() {
-        currentResource.amount++;
+        currentResource.amount += currentResource.perclick;
     });
 
     window.setInterval(function() {
@@ -50,7 +50,17 @@ function checkForNewCraftables() {
 }
 
 function buyItem(toBuy) {
-    console.log(toBuy);
+    for(var key in toBuy.requirements) {
+        for(var r in resources) {
+            if(resources[r].name === key) {
+                if(resources[r].amount - toBuy.requirements[key] >= 0) {
+                    resources[r].amount -= toBuy.requirements[key];
+                }
+            }
+        }
+    }
+    toBuy.effect();
+    toBuy.owned += 1;
 }
 
 function render() {
@@ -77,12 +87,18 @@ function renderCraftables() {
             bttnBuy.innerHTML = 'buy';
             bttnBuy.onclick = function() { buyItem(e) };
 
+            div.id = 'craftable-' + e.name;
             div.appendChild(name);
             div.appendChild(requirements);
             div.appendChild(bttnBuy);
             document.getElementById('craftables').appendChild(div);
 
             e.rendered = true;
+        }
+
+        if(e.owned >= e.maxBuy && document.getElementById(('craftable-' + e.name))) {
+            var remove = document.getElementById(('craftable-' + e.name));
+            remove.parentElement.removeChild(remove);
         }
     }
 }
